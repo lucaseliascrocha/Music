@@ -30,8 +30,9 @@ major_harmonic_field = {
     'B' : ['B','C#m','D#m','E','F#','G#m','A#m(b5)']
 }
 
-def pitch_by_similarity(chords):
+def pitch_harmonic(chords):
     global notes
+    global major_harmonic_field
 
     pitch = ''
     match = ''
@@ -44,12 +45,38 @@ def pitch_by_similarity(chords):
     if set(match) == set(chords):
         return pitch
     else:
-        chords =  chords - match
+        chords =  list(set(chords) & set(match))
         secundary_pitch = ''
         secundary_match = ''
         for note in major_scale[pitch][1:]:
             match_aux = [chord for chord in chords if chord in major_harmonic_field[note]]
-            if len(match_aux) > len(match):
+            if len(match_aux) > len(secundary_match):
+                secundary_pitch = note
+                secundary_match = match_aux
+        
+        return [pitch,secundary_pitch]
+
+def pitch_melody(input_notes):
+    global notes
+    global major_scale
+
+    pitch = ''
+    match = ''
+    for note in notes:
+        match_aux = [n for n in input_notes if n in major_scale[note]]
+        if len(match_aux) > len(match):
+            pitch = note
+            match = match_aux
+    
+    if set(match) == set(input_notes):
+        return pitch
+    else:
+        input_notes = list(set(input_notes) & set(match))
+        secundary_pitch = ''
+        secundary_match = ''
+        for note in major_scale[pitch][1:]:
+            match_aux = [n for n in input_notes if n in major_scale[note]]
+            if len(match_aux) > len(secundary_match):
                 secundary_pitch = note
                 secundary_match = match_aux
         
