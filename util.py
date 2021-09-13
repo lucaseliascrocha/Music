@@ -30,7 +30,7 @@ major_harmonic_field = {
     'B' : ['B','C#m','D#m','E','F#','G#m','A#m(b5)']
 }
 
-def harmonic_field_similarity(chords):
+def pitch_by_similarity(chords):
     global notes
 
     pitch = ''
@@ -52,3 +52,5 @@ def harmonic_field_similarity(chords):
             if len(match_aux) > len(match):
                 secundary_pitch = note
                 secundary_match = match_aux
+        
+        return [pitch,secundary_pitch]
