@@ -45,7 +45,7 @@ def pitch_harmonic(chords):
     if set(match) == set(chords):
         return pitch
     else:
-        chords =  list(set(chords) & set(match))
+        chords =  list(set(chords) - set(match))
         secundary_pitch = ''
         secundary_match = ''
         for note in major_scale[pitch][1:]:
@@ -56,13 +56,18 @@ def pitch_harmonic(chords):
         
         return [pitch,secundary_pitch]
 
-def pitch_melody(input_notes):
+def pitch_melody(input_notes, pitch_out = False):
     global notes
     global major_scale
 
+    if pitch_out:
+        in_notes = list(set(notes) - set(pitch_out))
+    else:
+        in_notes = notes
+
     pitch = ''
     match = ''
-    for note in notes:
+    for note in in_notes:
         match_aux = [n for n in input_notes if n in major_scale[note]]
         if len(match_aux) > len(match):
             pitch = note
@@ -71,7 +76,7 @@ def pitch_melody(input_notes):
     if set(match) == set(input_notes):
         return pitch
     else:
-        input_notes = list(set(input_notes) & set(match))
+        input_notes = list(set(input_notes) - set(match))
         secundary_pitch = ''
         secundary_match = ''
         for note in major_scale[pitch][1:]:
@@ -80,4 +85,6 @@ def pitch_melody(input_notes):
                 secundary_pitch = note
                 secundary_match = match_aux
         
-        return [pitch,secundary_pitch]
+        return pitch,secundary_pitch,match,secundary_match
+
+print(pitch_melody(['A','D#','B','C']))
